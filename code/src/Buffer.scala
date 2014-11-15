@@ -1,8 +1,4 @@
 
-class Buffer {
-  var contenu:String = new String("")
+class Buffer extends TexteEditable{
 
-  def add(i_text:String){
-    contenu = this.contenu.concat(i_text)
-  }
 }

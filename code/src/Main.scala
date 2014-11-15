@@ -4,10 +4,12 @@ object Main {
     println("Hello, world!")
 
     var buffer = new Buffer()
-    var geany = new Editeur(buffer)
+    var curseur = new Curseur()
+    
+    var geany = new Editeur(buffer, curseur)
     geany.insert("salut")
 
-    println(geany.buffer.contenu)
+    println(geany.texte.contenu)
     println(buffer.contenu)
   }
 }
