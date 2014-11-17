@@ -1,9 +1,9 @@
 
-class Editeur(i_texte: TexteEditable, i_curseur:Curseur){
-  def texte = i_texte
-  def curseur = i_curseur
+class Editeur(i_texte: Buffer, i_curseur:Curseur){
+  var texte = i_texte
+  var curseur = i_curseur
 
   def insert(i_text:String){
-    this.texte.add(i_text)
+
   }
 }
