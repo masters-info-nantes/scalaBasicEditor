@@ -8,9 +8,6 @@ object Main {
     var curseur = new Curseur()
     
     var geany = new Editeur(buffer, curseur)
-    geany.insert("salut")
-
-    println(geany.texte.contenu)
-    println(buffer.contenu)
+    geany.inserer("salut")
   }
 }

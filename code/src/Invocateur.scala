@@ -1,5 +1,10 @@
 import scala.collection.mutable.Stack
 
 class Invocateur {
-  def actions:Stack[Action] = new Stack()
+  val actions:Stack[Action] = new Stack()
+  
+  def ajouterEtExecuter(action:Action){
+    actions.push(action)
+    action.execute()
+  }
 }
