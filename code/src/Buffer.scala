@@ -21,18 +21,16 @@ class Buffer {
   
   def replace(debut:Int, fin:Int, text:String){
     
-    // Dépassement non gérable
-    if(fin < 0 || debut >= contenu.length()){
-      throw new IndexOutOfBoundsException();
+    // Dépassement
+    if(fin < 0 || debut >= contenu.length() 
+        || debut < 0 || fin >= contenu.length())
+    {
+      throw new IndexOutOfBoundsException()
     }
     
-    // Dépassement à recadrer
-    val indexDebut:Int = if(debut < 0) 0 else debut;
-    val indexFin:Int = if(fin >= contenu.length()) (contenu.length() - 1) else fin 
-
     // Extrait les 3 parties de la chaîne
-    val avant:String = contenu.substring(0, indexDebut)
-    val apres:String = contenu.substring(indexFin + 1, contenu.length()) // Caractere à indexFin doit être supprimé
+    val avant:String = contenu.substring(0, debut)
+    val apres:String = contenu.substring(fin + 1, contenu.length()) // Caractere à indexFin doit être supprimé
 
     contenu = avant.concat(text.concat(apres))
   }
@@ -43,6 +41,19 @@ class Buffer {
   
   def get():String = {
     return contenu
+  }
+  
+  // TODO : faire les tests mais déjà testé avec replace
+  def get(debut:Integer, fin:Integer):String = {
+    
+    // Dépassement
+    if(fin < 0 || debut >= contenu.length() 
+        || debut < 0 || fin >= contenu.length())
+    {
+      throw new IndexOutOfBoundsException()
+    }
+    
+    return contenu.substring(debut, fin)
   }
   
   def clear(){

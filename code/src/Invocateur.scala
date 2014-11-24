@@ -7,4 +7,8 @@ class Invocateur {
     actions.push(action)
     action.execute()
   }
+  
+  def undoLast(){
+    actions.pop().undo()
+  }
 }

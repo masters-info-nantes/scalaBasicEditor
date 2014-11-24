@@ -2,7 +2,7 @@ import org.junit.Assert._
 import org.junit.Test
 import org.junit.Before
 
-class Testbuffer {
+class TestBuffer {
 
   var buffer:Buffer = _
   var bufferVide:Buffer = _
@@ -29,9 +29,8 @@ class Testbuffer {
   // Other possibilities are tested with replace
   
   /* ---------- Buffer :: replace(debut:Int, fin:Int, text:String) ------- */
-  @Test def replaceDebutInf() { 
+  @Test(expected=classOf[IndexOutOfBoundsException]) def replaceDebutInf() { 
     buffer.replace(-100,4, "Changed")
-    assertEquals("ChangedReplaceWorld", buffer.contenu)
   }
   
   @Test(expected=classOf[IndexOutOfBoundsException]) def replaceDebutSup() { 
@@ -42,14 +41,12 @@ class Testbuffer {
     buffer.replace(2, -100, "Changed")
   }
     
-  @Test def replaceFinSup() { 
+  @Test(expected=classOf[IndexOutOfBoundsException]) def replaceFinSup() { 
     buffer.replace(12, 100, "Changed")
-    assertEquals("HelloReplaceChanged", buffer.contenu)
   }
   
-  @Test def replaceDebutInfFinSup() { 
+  @Test(expected=classOf[IndexOutOfBoundsException]) def replaceDebutInfFinSup() { 
     buffer.replace(-100, 100, "Changed")
-    assertEquals("Changed", buffer.contenu)
   }
   
   @Test def replaceTexteVide() { 
