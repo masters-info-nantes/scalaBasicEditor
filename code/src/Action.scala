@@ -9,11 +9,9 @@ abstract class Action(i_target:String, i_editeur:Editeur) {
 
 class Copier(i_target:String, i_editeur:Editeur) extends Action(i_target, i_editeur) {
   def execute(){
-    if(editeur.curseur.selectionActive()){
-      val ancienPressePapier:String = editeur.pressePapier.get()
-      editeur.pressePapier.set(target) 
-      target = ancienPressePapier
-    }
+    val ancienPressePapier:String = editeur.pressePapier.get()
+    editeur.pressePapier.set(target) 
+    target = ancienPressePapier
   }
   def undo(){
     editeur.pressePapier.set(target)
@@ -22,14 +20,12 @@ class Copier(i_target:String, i_editeur:Editeur) extends Action(i_target, i_edit
 
 class Coller(i_target:String, i_editeur:Editeur) extends Action(i_target, i_editeur) {
   def execute(){
-    if(editeur.pressePapier.contenu.length() > 0){
       if(editeur.curseur.selectionActive()){
        editeur.texte.replace(editeur.curseur.debutSelection, editeur.curseur.finSelection, target)         
       }
       else {
        editeur.texte.add(editeur.curseur.debutSelection, target) 
       }
-    }
   }
   def undo(){
     editeur.texte.delete(curseur.debutSelection, curseur.finSelection)
@@ -38,9 +34,7 @@ class Coller(i_target:String, i_editeur:Editeur) extends Action(i_target, i_edit
 
 class Effacer(i_target:String, i_editeur:Editeur) extends Action(i_target, i_editeur) {
   def execute(){
-    if(editeur.curseur.selectionActive()){
-      editeur.texte.delete(editeur.curseur.debutSelection, editeur.curseur.finSelection)
-    }
+    editeur.texte.delete(editeur.curseur.debutSelection, editeur.curseur.finSelection)
   }
   def undo(){
     editeur.texte.add(curseur.debutSelection, target) 
@@ -62,19 +56,12 @@ class Inserer(i_target:String, i_editeur:Editeur) extends Action(i_target, i_edi
 }
 
 class Deplacer(i_target:String, i_editeur:Editeur) extends Action(i_target, i_editeur) {
-  def execute(){
-    if(editeur.curseur.selectionActive()){
-
-    }
-  }
+  def execute(){}
   def undo(){}  
 }
 
 class Remplacer(i_target:String, i_editeur:Editeur) extends Action(i_target, i_editeur) {
-  def execute(){
-    target = editeur.texte.contenu
-    editeur.texte.replace(editeur.curseur.debutSelection, editeur.curseur.finSelection, target)
-  }
+  def execute(){}
   def undo(){
     editeur.texte.set(target)
   }  
