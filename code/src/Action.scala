@@ -18,20 +18,6 @@ class Copier(i_editeur:Editeur, i_target:String) extends Action(i_editeur, i_tar
   }
 }
 
-class Coller(i_editeur:Editeur, i_target:String) extends Action(i_editeur, i_target) {
-  def execute(){
-      if(editeur.curseur.selectionActive()){
-       editeur.texte.replace(editeur.curseur.debutSelection, editeur.curseur.finSelection, target)         
-      }
-      else {
-       editeur.texte.add(editeur.curseur.debutSelection, target) 
-      }
-  }
-  def undo(){
-    editeur.texte.delete(curseur.debutSelection, curseur.finSelection)
-  } 
-}
-
 class Effacer(i_editeur:Editeur, i_target:String) extends Action(i_editeur, i_target) {
   def execute(){
     editeur.texte.delete(editeur.curseur.debutSelection, editeur.curseur.finSelection)
@@ -49,16 +35,36 @@ class Selectionner(i_editeur:Editeur, i_debut:Integer, i_fin:Integer) extends Ac
     editeur.curseur.debutSelection = debut
     editeur.curseur.finSelection = fin
   }
-  def undo(){}  
+  def undo(){
+    editeur.curseur.finSelection = curseur.debutSelection
+  }  
 }
 
 class Inserer(i_editeur:Editeur, i_target:String) extends Action(i_editeur, i_target) {
+  var replaced:String = _
+  
   def execute(){
-    editeur.texte.add(editeur.curseur.debutSelection, target)
+      if(editeur.curseur.selectionActive()){
+       replaced = editeur.texte.get(editeur.curseur.debutSelection, editeur.curseur.finSelection)
+       editeur.texte.replace(editeur.curseur.debutSelection, editeur.curseur.finSelection - 1, target)
+      }
+      else {
+       editeur.texte.add(editeur.curseur.debutSelection, target) 
+      }
   }
   def undo(){
-    editeur.texte.delete(curseur.debutSelection, curseur.debutSelection + target.length() - 1)
+    if(curseur.selectionActive()){
+     editeur.texte.delete(curseur.debutSelection, curseur.finSelection)
+     editeur.texte.add(curseur.debutSelection, replaced)
+    }
+    else {
+     editeur.texte.delete(curseur.debutSelection, curseur.debutSelection + target.length() - 1)
+    }
   }  
+}
+
+class Coller(i_editeur:Editeur, i_target:String) extends Inserer(i_editeur, i_target) {
+  // Pareil que insérer mais permet de garder une meilleure trace des actions
 }
 
 class Deplacer(i_editeur:Editeur, i_target:String) extends Action(i_editeur, i_target) {

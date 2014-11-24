@@ -6,8 +6,13 @@ class Buffer {
       contenu = text
     }
     else {
-      // Ne supprime pas le caractère à index
-      replace(index, index - 1, text) 
+      if(index == 0){
+        replace(index, index, text) 
+      }
+      else {
+        // Ne supprime pas le caractère à index
+        replace(index, index - 1, text)        
+      }
     }
   }
   
@@ -20,7 +25,7 @@ class Buffer {
   }
   
   def replace(debut:Int, fin:Int, text:String){
-    
+
     // Dépassement
     if(fin < 0 || debut >= contenu.length() 
         || debut < 0 || fin >= contenu.length())
@@ -29,7 +34,7 @@ class Buffer {
     }
     
     // Extrait les 3 parties de la chaîne
-    val avant:String = contenu.substring(0, debut)
+    val avant:String = contenu.substring(0, debut) //if(debut == 0) "" else contenu.substring(0, debut)
     val apres:String = contenu.substring(fin + 1, contenu.length()) // Caractere à indexFin doit être supprimé
 
     contenu = avant.concat(text.concat(apres))

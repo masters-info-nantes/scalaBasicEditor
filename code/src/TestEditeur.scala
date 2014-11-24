@@ -12,11 +12,7 @@ class TestEditeur {
     editeur = new Editeur(buffer, curseur)
   }
   
-  @Test def copierVide() { 
-    editeur.copier()
-    assertEquals("", editeur.pressePapier.contenu)
-  }
-  
+  /* ---------- Editeur :: deplacerCurseur(dest:Integer) ------- */  
   @Test(expected=classOf[IndexOutOfBoundsException]) def deplacerCurseurInf() { 
     editeur.deplacerCurseur(-100)
   }
@@ -29,7 +25,8 @@ class TestEditeur {
     editeur.inserer("HelloWorld")
     editeur.deplacerCurseur(4)
   }
-    
+   
+  /* ---------- Editeur :: inserer(text:String) ------- */   
   @Test def insererRien() { 
     editeur.inserer("")
     assertEquals("", editeur.texte.contenu)
@@ -53,9 +50,73 @@ class TestEditeur {
     assertEquals("HelloWorld", editeur.texte.contenu)     
   }
   
-  @Test def selectionnerInf() {     
+  @Test def insererEditeurPleinAvecSelection() { 
+    editeur.inserer("HelloChangedWorld")
+    editeur.deplacerCurseur(5)
+    editeur.selectionner(12)
+    
+    editeur.copier()
+    editeur.deplacerCurseur(0)
+    editeur.selectionner(5)
+    editeur.coller()
+    assertEquals("ChangedChangedWorld", editeur.texte.contenu)      
+    
+    editeur.undo()
+    assertEquals("HelloChangedWorld", editeur.texte.contenu)     
+  }  
+  
+  /* ---------- Editeur :: getSelection() ------- */   
+  @Test def getSelectionNormal() { 
+    editeur.inserer("HelloChangedWorld")
+    editeur.deplacerCurseur(5)
+    editeur.selectionner(12)
+    
+    assertEquals("Changed", editeur.getSelection())
+  }
+  
+  /* ---------- Editeur :: selectionner(i_fin:Integer) ------- */    
+  @Test def selectionnerNormal() {     
     editeur.inserer("HelloWorld")
     editeur.deplacerCurseur(5)
+    
+    editeur.selectionner(8)
+    assertEquals("Wor", editeur.getSelection())
+    
     editeur.selectionner(2)
+    assertEquals("llo", editeur.getSelection())
   }
+  
+  @Test(expected=classOf[IndexOutOfBoundsException]) def selectionnerInf() {     
+    editeur.inserer("HelloWorld")
+    editeur.deplacerCurseur(5)
+    editeur.selectionner(-100)
+  }  
+  
+  @Test(expected=classOf[IndexOutOfBoundsException]) def selectionnerSup() {     
+    editeur.inserer("HelloWorld")
+    editeur.deplacerCurseur(5)
+    editeur.selectionner(100)
+  } 
+  
+  /* ---------- Editeur :: copier() ------- */  
+  @Test def copierVide() { 
+    editeur.copier()
+    assertEquals("", editeur.pressePapier.contenu)
+  }  
+  
+  @Test def copierPlein() { 
+    editeur.inserer("HelloChangedWorld")
+    editeur.deplacerCurseur(5)
+    editeur.selectionner(12)
+    
+    editeur.copier()
+    assertEquals("Changed", editeur.pressePapier.contenu)
+  }   
+  
+  /* ---------- Editeur :: coller() ------- */  
+  // Pareil que insérer dans les autres cas  
+  @Test def collerVide() { 
+    editeur.coller()
+    assertEquals("", editeur.texte.contenu)
+  }  
 }

@@ -11,7 +11,7 @@ class Editeur(i_texte: Buffer, i_curseur:Curseur){
   
   def copier(){
     if(this.curseur.selectionActive()){
-      var target:String = texte.contenu.substring(curseur.debutSelection, curseur.finSelection + 1)
+      var target:String = texte.contenu.substring(curseur.debutSelection, curseur.finSelection)
       var action:Action = new Copier(this, target)
       invocateur.ajouterEtExecuter(action)
     }
@@ -25,6 +25,7 @@ class Editeur(i_texte: Buffer, i_curseur:Curseur){
   }
   
   def effacer(){
+    // TODO test
     if(this.curseur.selectionActive()){
       var action:Action = new Effacer(this, "")
       invocateur.ajouterEtExecuter(action)   

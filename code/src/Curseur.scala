@@ -3,7 +3,7 @@ class Curseur {
   var finSelection:Int = -1
   
   def selectionActive():Boolean = {
-    return debutSelection > 0 && finSelection > 0
+    return debutSelection >= 0 && finSelection > 0
   }
   
   override def clone():Curseur = {
