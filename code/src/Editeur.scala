@@ -11,8 +11,7 @@ class Editeur(i_texte: Buffer, i_curseur:Curseur){
   
   def copier(){
     if(this.curseur.selectionActive()){
-      var target:String = texte.contenu.substring(curseur.debutSelection, curseur.finSelection)
-      var action:Action = new Copier(this, target)
+      var action:Action = new Copier(this, this.getSelection())
       invocateur.ajouterEtExecuter(action)
     }
   }
@@ -24,12 +23,17 @@ class Editeur(i_texte: Buffer, i_curseur:Curseur){
     }
   }
   
-  def effacer(){
-    // TODO test
+  def effacer(){   
+    // Cas général : appuis sur le touche [Backspace]
+    var debut:Integer = this.curseur.debutSelection - 1 // Le buffer compte par caractère et non par espace inter-caractère
+    var action:Action = new Effacer(this, this.texte.get(debut, debut), debut, debut) 
+
+    // Cas avec une sélection
     if(this.curseur.selectionActive()){
-      var action:Action = new Effacer(this, "")
-      invocateur.ajouterEtExecuter(action)   
+      action = new Effacer(this, this.getSelection(), this.curseur.debutSelection, this.curseur.finSelection - 1)
     }
+
+    invocateur.ajouterEtExecuter(action) 
   }
   
   def selectionner(i_fin:Integer){
@@ -58,11 +62,23 @@ class Editeur(i_texte: Buffer, i_curseur:Curseur){
     invocateur.ajouterEtExecuter(action)
   }
   
-  def deplacer(){
-    // TODO
+  def deplacer(dest:Integer){  
+    if(this.curseur.selectionActive()){
+      
+      if(dest < 0 || dest > this.texte.contenu.length()){
+        throw new IndexOutOfBoundsException()
+      }
+      
+      var action:Action = new Deplacer(this, this.getSelection(), dest)
+      invocateur.ajouterEtExecuter(action)
+    }
   }
-  def remplacer(){
-    // TODO
+  
+  def remplacer(text:String){
+    if(this.curseur.selectionActive()){      
+      var action:Action = new Remplacer(this, text)
+      invocateur.ajouterEtExecuter(action)
+    }
   }
   
   def deplacerCurseur(dest:Integer){
@@ -75,6 +91,6 @@ class Editeur(i_texte: Buffer, i_curseur:Curseur){
   
   // Le curseur est forcément au bon endroit (voir déplacerCurseur et sélectionner)
   def getSelection():String = {
-    return this.texte.get(this.curseur.debutSelection, this.curseur.finSelection)
+    return this.texte.get(this.curseur.debutSelection, this.curseur.finSelection - 1)
   }
 }

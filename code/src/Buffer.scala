@@ -6,13 +6,8 @@ class Buffer {
       contenu = text
     }
     else {
-      if(index == 0){
-        replace(index, index, text) 
-      }
-      else {
-        // Ne supprime pas le caractère à index
-        replace(index, index - 1, text)        
-      }
+     // Ne supprime pas le caractère à index
+     replace(index, index - 1, text)        
     }
   }
   
@@ -27,7 +22,7 @@ class Buffer {
   def replace(debut:Int, fin:Int, text:String){
 
     // Dépassement
-    if(fin < 0 || debut >= contenu.length() 
+    if(fin < -1 || debut >= contenu.length() 
         || debut < 0 || fin >= contenu.length())
     {
       throw new IndexOutOfBoundsException()
@@ -58,7 +53,7 @@ class Buffer {
       throw new IndexOutOfBoundsException()
     }
     
-    return contenu.substring(debut, fin)
+    return contenu.substring(debut, fin + 1)
   }
   
   def clear(){

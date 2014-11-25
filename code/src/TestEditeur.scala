@@ -119,4 +119,70 @@ class TestEditeur {
     editeur.coller()
     assertEquals("", editeur.texte.contenu)
   }  
+  
+  /* ---------- Editeur :: effacer() ------- */   
+  @Test def effacerSansSelection() { 
+    editeur.inserer("HellooWorld")
+    editeur.deplacerCurseur(6)
+    
+    editeur.effacer();
+    assertEquals("HelloWorld", editeur.texte.contenu)
+    
+    editeur.undo()
+    assertEquals("HellooWorld", editeur.texte.contenu)    
+  } 
+  
+  @Test def effacerAvecSelection() { 
+    editeur.inserer("HelloChangedWorld")
+    editeur.deplacerCurseur(5)
+    editeur.selectionner(12)
+    
+    editeur.effacer();   
+    assertEquals("HelloWorld", editeur.texte.contenu)
+    
+    editeur.undo()
+    assertEquals("HelloChangedWorld", editeur.texte.contenu)    
+  }
+  
+  /* ---------- Editeur :: deplacer(dest:Integer) ------- */   
+  @Test(expected=classOf[IndexOutOfBoundsException]) def deplacerInf() { 
+    editeur.inserer("HelloChangedWorld")
+    editeur.deplacerCurseur(5)
+    editeur.selectionner(12)
+    
+    editeur.deplacer(-100)   
+  }   
+  
+  @Test(expected=classOf[IndexOutOfBoundsException]) def deplacerSup() { 
+    editeur.inserer("HelloChangedWorld")
+    editeur.deplacerCurseur(5)
+    editeur.selectionner(12)
+    
+    editeur.deplacer(100)   
+  }  
+  
+  @Test def deplacerNormal() { 
+    editeur.inserer("HelloChangedWorld")
+    editeur.deplacerCurseur(5)
+    editeur.selectionner(12)
+    
+    editeur.deplacer(0)
+    assertEquals("ChangedHelloWorld", editeur.texte.contenu)
+    
+    editeur.undo()
+    assertEquals("HelloChangedWorld", editeur.texte.contenu)    
+  }  
+  
+  /* ---------- Editeur :: remplacer() ------- */   
+  @Test def remplacer() { 
+    editeur.inserer("HelloChangedWorld")
+    editeur.deplacerCurseur(5)
+    editeur.selectionner(12)
+    
+    editeur.remplacer("Replaced")  
+    assertEquals("HelloReplacedWorld", editeur.texte.contenu)
+
+    editeur.undo()
+    assertEquals("HelloChangedWorld", editeur.texte.contenu)    
+  } 
 }

@@ -18,12 +18,20 @@ class Copier(i_editeur:Editeur, i_target:String) extends Action(i_editeur, i_tar
   }
 }
 
-class Effacer(i_editeur:Editeur, i_target:String) extends Action(i_editeur, i_target) {
+class Effacer(i_editeur:Editeur, i_target:String, i_debut:Integer, i_fin:Integer) extends Action(i_editeur, i_target) {
+  var debut:Integer = i_debut
+  var fin:Integer = i_fin
+  
   def execute(){
-    editeur.texte.delete(editeur.curseur.debutSelection, editeur.curseur.finSelection)
+    editeur.texte.delete(debut, fin)
   }
   def undo(){
-    editeur.texte.add(curseur.debutSelection, target) 
+    if(curseur.selectionActive()){
+     editeur.texte.add(curseur.debutSelection, target)      
+    }
+    else {
+     editeur.texte.add(curseur.debutSelection - 1, target)      
+    }
   }  
 }
 
@@ -45,7 +53,7 @@ class Inserer(i_editeur:Editeur, i_target:String) extends Action(i_editeur, i_ta
   
   def execute(){
       if(editeur.curseur.selectionActive()){
-       replaced = editeur.texte.get(editeur.curseur.debutSelection, editeur.curseur.finSelection)
+       replaced = editeur.getSelection()
        editeur.texte.replace(editeur.curseur.debutSelection, editeur.curseur.finSelection - 1, target)
       }
       else {
@@ -54,7 +62,7 @@ class Inserer(i_editeur:Editeur, i_target:String) extends Action(i_editeur, i_ta
   }
   def undo(){
     if(curseur.selectionActive()){
-     editeur.texte.delete(curseur.debutSelection, curseur.finSelection)
+     editeur.texte.delete(curseur.debutSelection, curseur.debutSelection + target.length() - 1)
      editeur.texte.add(curseur.debutSelection, replaced)
     }
     else {
@@ -67,14 +75,28 @@ class Coller(i_editeur:Editeur, i_target:String) extends Inserer(i_editeur, i_ta
   // Pareil que insérer mais permet de garder une meilleure trace des actions
 }
 
-class Deplacer(i_editeur:Editeur, i_target:String) extends Action(i_editeur, i_target) {
-  def execute(){}
-  def undo(){}  
+class Deplacer(i_editeur:Editeur, i_target:String, i_dest:Integer) extends Action(i_editeur, i_target) {
+  var dest:Integer = i_dest
+  
+  def execute(){
+    editeur.texte.delete(editeur.curseur.debutSelection, editeur.curseur.finSelection - 1)
+    editeur.texte.add(dest, target)
+  }
+  def undo(){
+    editeur.texte.delete(dest, dest + target.length() - 1)
+    editeur.texte.add(curseur.debutSelection, target)
+  }  
 }
 
 class Remplacer(i_editeur:Editeur, i_target:String) extends Action(i_editeur, i_target) {
-  def execute(){}
+  var replaced:String = _
+  def execute(){
+    replaced = this.editeur.getSelection()
+    editeur.texte.delete(this.editeur.curseur.debutSelection, this.editeur.curseur.finSelection - 1)
+    editeur.texte.add(this.editeur.curseur.debutSelection, target)
+  }
   def undo(){
-    editeur.texte.set(target)
+    editeur.texte.delete(curseur.debutSelection, curseur.debutSelection + target.length() - 1)
+    editeur.texte.add(curseur.debutSelection, replaced)    
   }  
 }
