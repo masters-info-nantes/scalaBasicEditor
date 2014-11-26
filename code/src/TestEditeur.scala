@@ -185,4 +185,67 @@ class TestEditeur {
     editeur.undo()
     assertEquals("HelloChangedWorld", editeur.texte.contenu)    
   } 
+  
+  /* ---------- Editeur :: Test multiple avec observer ------- */
+  @Test def multipleEditeur() { 
+    var buffer = new Buffer()
+    
+    var editeur1:Editeur = new Editeur(buffer, new Curseur())
+    var editeur2:Editeur = new Editeur(new Buffer(), new Curseur())
+    buffer.addObserver(editeur2)
+    
+    assertEquals("", editeur1.texte.contenu)
+    assertEquals("", editeur2.texte.contenu) 
+    
+    editeur1.inserer("HelloWorld")
+    
+    assertEquals("HelloWorld", editeur1.texte.contenu)
+    assertEquals("HelloWorld", editeur2.texte.contenu)     
+  }   
+  
+  /* ---------- Editeur :: Test complet ------- */   
+  @Test def editeurComplet() { 
+    editeur.inserer("HelloChangedWorld")
+    editeur.deplacerCurseur(5)
+    editeur.selectionner(12)
+    
+    editeur.remplacer("Replaced")  
+    assertEquals("HelloReplacedWorld", editeur.texte.contenu)
+
+    editeur.selectionner(13)
+    editeur.copier()
+    editeur.effacer()
+    assertEquals("HelloWorld", editeur.texte.contenu)    
+    
+    editeur.deplacerCurseur(10)
+    editeur.coller()
+    assertEquals("HelloWorldReplaced", editeur.texte.contenu)
+    
+    editeur.deplacerCurseur(10)
+    editeur.selectionner(18)
+    editeur.deplacer(5)
+    assertEquals("HelloReplacedWorld", editeur.texte.contenu)   
+    
+    editeur.undo()
+    assertEquals("HelloWorldReplaced", editeur.texte.contenu)     
+    
+    editeur.undo()
+    editeur.undo()
+    editeur.undo()
+    assertEquals("HelloWorld", editeur.texte.contenu)
+    
+    editeur.undo()
+    editeur.undo()
+    assertEquals("HelloReplacedWorld", editeur.texte.contenu)
+    
+    editeur.undo()
+    editeur.undo()
+    editeur.undo()
+    assertEquals("HelloChangedWorld", editeur.texte.contenu)
+    
+    editeur.undo()
+    editeur.undo()
+    editeur.undo()
+    assertEquals("", editeur.texte.contenu)    
+  }   
 }

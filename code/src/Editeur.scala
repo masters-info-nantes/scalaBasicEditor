@@ -1,10 +1,15 @@
 
-class Editeur(i_texte: Buffer, i_curseur:Curseur){
+class Editeur(i_texte: Buffer, i_curseur:Curseur) extends Observer[Buffer]{
+      
   var texte:Buffer = i_texte
+  
   var curseur:Curseur = i_curseur
   var pressePapier:Buffer = new Buffer()
+  
+  var _macro:Macro = _
+  var captureMacro:Boolean = false
   var invocateur:Invocateur = new Invocateur()
-
+    
   def undo(){
     this.invocateur.undoLast()
   }
@@ -12,19 +17,19 @@ class Editeur(i_texte: Buffer, i_curseur:Curseur){
   def copier(){
     if(this.curseur.selectionActive()){
       var action:Action = new Copier(this, this.getSelection())
-      invocateur.ajouterEtExecuter(action)
+      this.executerAction(action)
     }
   }
   
   def coller(){
     if(this.pressePapier.contenu.length() > 0){
       var action:Action = new Coller(this, this.pressePapier.contenu)
-      invocateur.ajouterEtExecuter(action)
+      this.executerAction(action)
     }
   }
   
   def effacer(){   
-    // Cas général : appuis sur le touche [Backspace]
+    // Cas général : appui sur le touche [Backspace]
     var debut:Integer = this.curseur.debutSelection - 1 // Le buffer compte par caractère et non par espace inter-caractère
     var action:Action = new Effacer(this, this.texte.get(debut, debut), debut, debut) 
 
@@ -33,7 +38,7 @@ class Editeur(i_texte: Buffer, i_curseur:Curseur){
       action = new Effacer(this, this.getSelection(), this.curseur.debutSelection, this.curseur.finSelection - 1)
     }
 
-    invocateur.ajouterEtExecuter(action) 
+    this.executerAction(action) 
   }
   
   def selectionner(i_fin:Integer){
@@ -54,12 +59,12 @@ class Editeur(i_texte: Buffer, i_curseur:Curseur){
     }
     
     var action:Action = new Selectionner(this, debut, fin)
-    invocateur.ajouterEtExecuter(action)
+    this.executerAction(action)
   }
   
   def inserer(text:String){
     var action:Action = new Inserer(this, text)
-    invocateur.ajouterEtExecuter(action)
+    this.executerAction(action)
   }
   
   def deplacer(dest:Integer){  
@@ -70,14 +75,14 @@ class Editeur(i_texte: Buffer, i_curseur:Curseur){
       }
       
       var action:Action = new Deplacer(this, this.getSelection(), dest)
-      invocateur.ajouterEtExecuter(action)
+      this.executerAction(action)
     }
   }
   
   def remplacer(text:String){
     if(this.curseur.selectionActive()){      
       var action:Action = new Remplacer(this, text)
-      invocateur.ajouterEtExecuter(action)
+      this.executerAction(action)
     }
   }
   
@@ -85,12 +90,38 @@ class Editeur(i_texte: Buffer, i_curseur:Curseur){
     if(dest < 0 || dest > this.texte.contenu.length()){
       throw new IndexOutOfBoundsException()
     }
-    this.curseur.debutSelection = dest
-    this.curseur.finSelection = -1
+    var action:Action = new DeplacerCurseur(this, "", dest)
+    this.executerAction(action)
   }
   
   // Le curseur est forcément au bon endroit (voir déplacerCurseur et sélectionner)
   def getSelection():String = {
     return this.texte.get(this.curseur.debutSelection, this.curseur.finSelection - 1)
+  }
+  
+  def executerAction(action:Action){
+    if(this.captureMacro){
+      this._macro.ajouterAction(action)
+    }
+    this.invocateur.ajouterEtExecuter(action)
+  }
+  
+  def demarrerEnregistrementMacro(){
+    this._macro = new Macro(this, "")
+    this.captureMacro = true
+  }
+  
+  def arreterEnregitrementMacro(){
+    this.captureMacro = false
+  }
+  
+  def jouerMacro(){
+    if(!this.captureMacro){
+     this.invocateur.ajouterEtExecuter(_macro)   
+    }
+  }
+  
+  def receiveUpdate(subject: Buffer){
+    this.texte.contenu = subject.contenu
   }
 }

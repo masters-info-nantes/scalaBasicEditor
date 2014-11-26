@@ -4,8 +4,12 @@ class Invocateur {
   val actions:Stack[Action] = new Stack()
   
   def ajouterEtExecuter(action:Action){
-    actions.push(action)
+    this.ajouter(action)
     action.execute()
+  }
+  
+  def ajouter(action:Action){
+    actions.push(action) 
   }
   
   def undoLast(){

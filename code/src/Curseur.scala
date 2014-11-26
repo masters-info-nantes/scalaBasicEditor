@@ -6,6 +6,11 @@ class Curseur {
     return debutSelection >= 0 && finSelection > 0
   }
   
+  def copy(curseur:Curseur){
+    this.debutSelection = curseur.debutSelection
+    this.finSelection = curseur.finSelection
+  }
+  
   override def clone():Curseur = {
     var curseur:Curseur =  new Curseur()
     

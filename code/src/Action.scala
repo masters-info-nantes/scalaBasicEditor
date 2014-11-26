@@ -24,6 +24,7 @@ class Effacer(i_editeur:Editeur, i_target:String, i_debut:Integer, i_fin:Integer
   
   def execute(){
     editeur.texte.delete(debut, fin)
+    editeur.curseur.finSelection = -1
   }
   def undo(){
     if(curseur.selectionActive()){
@@ -32,6 +33,7 @@ class Effacer(i_editeur:Editeur, i_target:String, i_debut:Integer, i_fin:Integer
     else {
      editeur.texte.add(curseur.debutSelection - 1, target)      
     }
+    editeur.curseur.copy(curseur)
   }  
 }
 
@@ -59,6 +61,8 @@ class Inserer(i_editeur:Editeur, i_target:String) extends Action(i_editeur, i_ta
       else {
        editeur.texte.add(editeur.curseur.debutSelection, target) 
       }
+      editeur.curseur.debutSelection += target.length()
+      editeur.curseur.finSelection = -1
   }
   def undo(){
     if(curseur.selectionActive()){
@@ -67,7 +71,8 @@ class Inserer(i_editeur:Editeur, i_target:String) extends Action(i_editeur, i_ta
     }
     else {
      editeur.texte.delete(curseur.debutSelection, curseur.debutSelection + target.length() - 1)
-    }
+    }   
+    editeur.curseur.copy(curseur)
   }  
 }
 
@@ -81,10 +86,14 @@ class Deplacer(i_editeur:Editeur, i_target:String, i_dest:Integer) extends Actio
   def execute(){
     editeur.texte.delete(editeur.curseur.debutSelection, editeur.curseur.finSelection - 1)
     editeur.texte.add(dest, target)
+    
+    editeur.curseur.debutSelection += dest
+    editeur.curseur.finSelection += dest
   }
   def undo(){
     editeur.texte.delete(dest, dest + target.length() - 1)
     editeur.texte.add(curseur.debutSelection, target)
+    editeur.curseur.copy(curseur)
   }  
 }
 
@@ -94,9 +103,22 @@ class Remplacer(i_editeur:Editeur, i_target:String) extends Action(i_editeur, i_
     replaced = this.editeur.getSelection()
     editeur.texte.delete(this.editeur.curseur.debutSelection, this.editeur.curseur.finSelection - 1)
     editeur.texte.add(this.editeur.curseur.debutSelection, target)
+    editeur.curseur.finSelection = editeur.curseur.debutSelection + target.length()
   }
   def undo(){
     editeur.texte.delete(curseur.debutSelection, curseur.debutSelection + target.length() - 1)
-    editeur.texte.add(curseur.debutSelection, replaced)    
+    editeur.texte.add(curseur.debutSelection, replaced) 
+    editeur.curseur.copy(curseur)
   }  
+}
+
+class DeplacerCurseur(i_editeur:Editeur, i_target:String, i_dest:Integer) extends Action(i_editeur, i_target) {
+  var dest:Integer = i_dest
+  def execute(){
+    editeur.curseur.debutSelection = dest
+    editeur.curseur.finSelection = -1
+  }
+  def undo(){
+    editeur.curseur.copy(curseur)
+  }
 }
