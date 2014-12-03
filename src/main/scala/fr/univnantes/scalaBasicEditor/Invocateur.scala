@@ -1,3 +1,5 @@
+package fr.univnantes.scalaBasicEditor
+
 import scala.collection.mutable.Stack
 
 class Invocateur {

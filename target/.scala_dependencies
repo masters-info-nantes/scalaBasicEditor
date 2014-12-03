@@ -1,0 +1,31 @@
+/home/anthony/Documents/Génie Logiciel/projet/scalaBasicEditor/target/test-classes:/home/anthony/Documents/Génie Logiciel/projet/scalaBasicEditor/target/classes:/home/anthony/.m2/repository/org/scala-lang/scala-library/2.8.0/scala-library-2.8.0.jar:/home/anthony/.m2/repository/junit/junit/4.8.1/junit-4.8.1.jar:/home/anthony/.m2/repository/org/scala-tools/testing/specs_2.8.0/1.6.5/specs_2.8.0-1.6.5.jar:/home/anthony/.m2/repository/org/scalatest/scalatest/1.2/scalatest-1.2.jar
+-------
+../src/test/scala/samples/specs.scala -> ../src/test/scala/samples/specs.scala
+../src/test/scala/fr/univnantes/scalaBasicEditor/TestBuffer.scala -> ../src/test/scala/fr/univnantes/scalaBasicEditor/TestBuffer.scala
+../src/test/scala/fr/univnantes/scalaBasicEditor/TestEditeur.scala -> ../src/test/scala/fr/univnantes/scalaBasicEditor/TestEditeur.scala
+../src/test/scala/samples/scalatest.scala -> ../src/test/scala/samples/scalatest.scala
+../src/test/scala/fr/univnantes/scalaBasicEditor/TestMacro.scala -> ../src/test/scala/fr/univnantes/scalaBasicEditor/TestMacro.scala
+-------
+../src/test/scala/samples/junit.scala -> test-classes/samples/AppTest.class
+../src/test/scala/samples/specs.scala -> test-classes/samples/MySpecMain$.class
+../src/test/scala/samples/specs.scala -> test-classes/samples/MySpecTest$$anonfun$1.class
+../src/test/scala/samples/specs.scala -> test-classes/samples/MySpecTest$$anonfun$1$$anonfun$apply$2.class
+../src/test/scala/samples/specs.scala -> test-classes/samples/MySpecTest.class
+../src/test/scala/samples/specs.scala -> test-classes/samples/MySpecTest$$anonfun$2$$anonfun$apply$4$$anonfun$apply$3.class
+../src/test/scala/samples/specs.scala -> test-classes/samples/MySpecTest$$anonfun$2$$anonfun$apply$4.class
+../src/test/scala/samples/specs.scala -> test-classes/samples/MySpecTest$$anonfun$1$$anonfun$apply$1.class
+../src/test/scala/samples/specs.scala -> test-classes/samples/MySpecTest$$anonfun$2.class
+../src/test/scala/samples/specs.scala -> test-classes/samples/MySpecMain.class
+../src/test/scala/fr/univnantes/scalaBasicEditor/TestBuffer.scala -> test-classes/fr/univnantes/scalaBasicEditor/TestBuffer.class
+../src/test/scala/fr/univnantes/scalaBasicEditor/TestEditeur.scala -> test-classes/fr/univnantes/scalaBasicEditor/TestEditeur.class
+../src/test/scala/samples/scalatest.scala -> test-classes/samples/MapSpec$$anonfun$4$$anonfun$apply$mcV$sp$1.class
+../src/test/scala/samples/scalatest.scala -> test-classes/samples/MapSpec$$anonfun$4$$anonfun$apply$mcV$sp$2.class
+../src/test/scala/samples/scalatest.scala -> test-classes/samples/MapSpec.class
+../src/test/scala/samples/scalatest.scala -> test-classes/samples/StackSuite$$anonfun$stackShouldThrowNoSuchElementExceptionIfAnEmptyStackIsPopped$1.class
+../src/test/scala/samples/scalatest.scala -> test-classes/samples/MapSpec$$anonfun$4.class
+../src/test/scala/samples/scalatest.scala -> test-classes/samples/ListSuite$$anonfun$1.class
+../src/test/scala/samples/scalatest.scala -> test-classes/samples/ListSuite$$anonfun$3.class
+../src/test/scala/samples/scalatest.scala -> test-classes/samples/StackSuite.class
+../src/test/scala/samples/scalatest.scala -> test-classes/samples/ListSuite$$anonfun$2.class
+../src/test/scala/samples/scalatest.scala -> test-classes/samples/ListSuite.class
+../src/test/scala/fr/univnantes/scalaBasicEditor/TestMacro.scala -> test-classes/fr/univnantes/scalaBasicEditor/TestMacro.class

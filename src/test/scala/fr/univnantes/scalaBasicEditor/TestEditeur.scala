@@ -1,6 +1,10 @@
-import org.junit.Assert._
-import org.junit.Test
-import org.junit.Before
+package fr.univnantes.scalaBasicEditor
+
+//import org.junit.Assert._
+//import org.junit.Test
+//import org.junit.Before
+import org.junit._
+import Assert._
 
 class TestEditeur {
 
@@ -12,7 +16,7 @@ class TestEditeur {
     editeur = new Editeur(buffer, curseur)
   }
   
-  /* ---------- Editeur :: deplacerCurseur(dest:Integer) ------- */  
+  /* ---------- Editeur :: deplacerCurseur(dest:Int) ------- */  
   @Test(expected=classOf[IndexOutOfBoundsException]) def deplacerCurseurInf() { 
     editeur.deplacerCurseur(-100)
   }
@@ -74,7 +78,7 @@ class TestEditeur {
     assertEquals("Changed", editeur.getSelection())
   }
   
-  /* ---------- Editeur :: selectionner(i_fin:Integer) ------- */    
+  /* ---------- Editeur :: selectionner(i_fin:Int) ------- */    
   @Test def selectionnerNormal() {     
     editeur.inserer("HelloWorld")
     editeur.deplacerCurseur(5)
@@ -144,7 +148,7 @@ class TestEditeur {
     assertEquals("HelloChangedWorld", editeur.texte.contenu)    
   }
   
-  /* ---------- Editeur :: deplacer(dest:Integer) ------- */   
+  /* ---------- Editeur :: deplacer(dest:Int) ------- */   
   @Test(expected=classOf[IndexOutOfBoundsException]) def deplacerInf() { 
     editeur.inserer("HelloChangedWorld")
     editeur.deplacerCurseur(5)

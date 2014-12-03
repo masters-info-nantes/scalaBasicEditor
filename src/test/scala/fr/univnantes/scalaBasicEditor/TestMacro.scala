@@ -1,6 +1,10 @@
-import org.junit.Assert._
-import org.junit.Test
-import org.junit.Before
+package fr.univnantes.scalaBasicEditor
+
+//import org.junit.Assert._
+//import org.junit.Test
+//import org.junit.Before
+import org.junit._
+import Assert._
 
 class TestMacro {
 
@@ -12,7 +16,8 @@ class TestMacro {
     editeur = new Editeur(buffer, curseur)
   }
   
-  @Test def macroNormal() { 
+  @Test
+  def macroNormal() { 
     editeur.demarrerEnregistrementMacro()
     
     editeur.inserer("HelloChangedWorld")

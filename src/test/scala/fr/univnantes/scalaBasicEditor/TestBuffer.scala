@@ -1,6 +1,10 @@
-import org.junit.Assert._
-import org.junit.Test
-import org.junit.Before
+package fr.univnantes.scalaBasicEditor
+
+//import org.junit.Assert._
+//import org.junit.Test
+//import org.junit.Before
+import org.junit._
+import Assert._
 
 class TestBuffer {
 
@@ -14,7 +18,7 @@ class TestBuffer {
     bufferVide = new Buffer()
   }
 
-  /* ---------- Buffer :: add(index:Int, text:String) ------- */
+/* ---------- Buffer :: add(index:Integer, text:String) ------- */
   @Test def addTextVide() { 
     assertEquals("", bufferVide.contenu)    
     bufferVide.add(0, "Changed")
@@ -28,7 +32,7 @@ class TestBuffer {
   
   // Other possibilities are tested with replace
   
-  /* ---------- Buffer :: replace(debut:Int, fin:Int, text:String) ------- */
+  /* ---------- Buffer :: replace(debut:Integer, fin:Integer, text:String) ------- */
   @Test(expected=classOf[IndexOutOfBoundsException]) def replaceDebutInf() { 
     buffer.replace(-100,4, "Changed")
   }

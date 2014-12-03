@@ -1,3 +1,5 @@
+package fr.univnantes.scalaBasicEditor
+
 abstract class Action(i_editeur:Editeur, i_target:String) {
   var target:String = i_target
   var editeur:Editeur = i_editeur
@@ -18,9 +20,9 @@ class Copier(i_editeur:Editeur, i_target:String) extends Action(i_editeur, i_tar
   }
 }
 
-class Effacer(i_editeur:Editeur, i_target:String, i_debut:Integer, i_fin:Integer) extends Action(i_editeur, i_target) {
-  var debut:Integer = i_debut
-  var fin:Integer = i_fin
+class Effacer(i_editeur:Editeur, i_target:String, i_debut:Int, i_fin:Int) extends Action(i_editeur, i_target) {
+  var debut:Int = i_debut
+  var fin:Int = i_fin
   
   def execute(){
     editeur.texte.delete(debut, fin)
@@ -37,9 +39,9 @@ class Effacer(i_editeur:Editeur, i_target:String, i_debut:Integer, i_fin:Integer
   }  
 }
 
-class Selectionner(i_editeur:Editeur, i_debut:Integer, i_fin:Integer) extends Action(i_editeur, "") {
-  var debut:Integer = i_debut
-  var fin:Integer = i_fin
+class Selectionner(i_editeur:Editeur, i_debut:Int, i_fin:Int) extends Action(i_editeur, "") {
+  var debut:Int = i_debut
+  var fin:Int = i_fin
   
   def execute(){
     editeur.curseur.debutSelection = debut
@@ -80,8 +82,8 @@ class Coller(i_editeur:Editeur, i_target:String) extends Inserer(i_editeur, i_ta
   // Pareil que insérer mais permet de garder une meilleure trace des actions
 }
 
-class Deplacer(i_editeur:Editeur, i_target:String, i_dest:Integer) extends Action(i_editeur, i_target) {
-  var dest:Integer = i_dest
+class Deplacer(i_editeur:Editeur, i_target:String, i_dest:Int) extends Action(i_editeur, i_target) {
+  var dest:Int = i_dest
   
   def execute(){
     editeur.texte.delete(editeur.curseur.debutSelection, editeur.curseur.finSelection - 1)
@@ -112,8 +114,8 @@ class Remplacer(i_editeur:Editeur, i_target:String) extends Action(i_editeur, i_
   }  
 }
 
-class DeplacerCurseur(i_editeur:Editeur, i_target:String, i_dest:Integer) extends Action(i_editeur, i_target) {
-  var dest:Integer = i_dest
+class DeplacerCurseur(i_editeur:Editeur, i_target:String, i_dest:Int) extends Action(i_editeur, i_target) {
+  var dest:Int = i_dest
   def execute(){
     editeur.curseur.debutSelection = dest
     editeur.curseur.finSelection = -1

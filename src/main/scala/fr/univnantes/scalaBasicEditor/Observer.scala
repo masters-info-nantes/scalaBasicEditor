@@ -1,3 +1,5 @@
+package fr.univnantes.scalaBasicEditor
+
 trait Observer[T] {
     def receiveUpdate(subject: T);
 }

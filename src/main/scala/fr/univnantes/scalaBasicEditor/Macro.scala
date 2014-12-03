@@ -1,3 +1,5 @@
+package fr.univnantes.scalaBasicEditor
+
 import scala.collection.mutable.Queue
 
 class Macro(i_editeur:Editeur, i_target:String) extends Action(i_editeur, i_target) {

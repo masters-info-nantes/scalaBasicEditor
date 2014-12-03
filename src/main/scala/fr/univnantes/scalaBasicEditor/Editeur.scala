@@ -1,3 +1,4 @@
+package fr.univnantes.scalaBasicEditor
 
 class Editeur(i_texte: Buffer, i_curseur:Curseur) extends Observer[Buffer]{
       
@@ -30,7 +31,7 @@ class Editeur(i_texte: Buffer, i_curseur:Curseur) extends Observer[Buffer]{
   
   def effacer(){   
     // Cas général : appui sur le touche [Backspace]
-    var debut:Integer = this.curseur.debutSelection - 1 // Le buffer compte par caractère et non par espace inter-caractère
+    var debut:Int = this.curseur.debutSelection - 1 // Le buffer compte par caractère et non par espace inter-caractère
     var action:Action = new Effacer(this, this.texte.get(debut, debut), debut, debut) 
 
     // Cas avec une sélection
@@ -41,10 +42,10 @@ class Editeur(i_texte: Buffer, i_curseur:Curseur) extends Observer[Buffer]{
     this.executerAction(action) 
   }
   
-  def selectionner(i_fin:Integer){
-    var debut:Integer = this.curseur.debutSelection
-    var fin:Integer = i_fin
-    var tmp:Integer = -1
+  def selectionner(i_fin:Int){
+    var debut:Int = this.curseur.debutSelection
+    var fin:Int = i_fin
+    var tmp:Int = -1
     
     // Dépassement
     if(fin < 0 || fin > this.texte.contenu.length()){
@@ -67,7 +68,7 @@ class Editeur(i_texte: Buffer, i_curseur:Curseur) extends Observer[Buffer]{
     this.executerAction(action)
   }
   
-  def deplacer(dest:Integer){  
+  def deplacer(dest:Int){  
     if(this.curseur.selectionActive()){
       
       if(dest < 0 || dest > this.texte.contenu.length()){
@@ -86,7 +87,7 @@ class Editeur(i_texte: Buffer, i_curseur:Curseur) extends Observer[Buffer]{
     }
   }
   
-  def deplacerCurseur(dest:Integer){
+  def deplacerCurseur(dest:Int){
     if(dest < 0 || dest > this.texte.contenu.length()){
       throw new IndexOutOfBoundsException()
     }

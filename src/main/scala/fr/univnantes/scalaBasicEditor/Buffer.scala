@@ -1,3 +1,5 @@
+package fr.univnantes.scalaBasicEditor
+
 class Buffer extends Subject[Buffer]{
   var contenu:String = new String("")
 
@@ -48,7 +50,7 @@ class Buffer extends Subject[Buffer]{
     return contenu
   }
 
-  def get(debut:Integer, fin:Integer):String = {
+  def get(debut:Int, fin:Int):String = {
     
     // Dépassement
     if(fin < 0 || debut >= contenu.length() 
