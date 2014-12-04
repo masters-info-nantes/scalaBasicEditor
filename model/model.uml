@@ -142,9 +142,6 @@ contenu = StringBuffer
     <ownedOperation xmi:type="uml:Operation" xmi:id="_dc6DAHlqEeS3PaPkrOoyLw" name="execute"/>
     <ownedOperation xmi:type="uml:Operation" xmi:id="_e7wmoHlqEeS3PaPkrOoyLw" name="undo"/>
   </packagedElement>
-  <packagedElement xmi:type="uml:Class" xmi:id="_HBS8IHlrEeS3PaPkrOoyLw" name="Copier">
-    <generalization xmi:type="uml:Generalization" xmi:id="_LHWLgHlrEeS3PaPkrOoyLw" general="_BfU90HlqEeS3PaPkrOoyLw"/>
-  </packagedElement>
   <packagedElement xmi:type="uml:Class" xmi:id="_NgjekHlrEeS3PaPkrOoyLw" name="Effacer">
     <generalization xmi:type="uml:Generalization" xmi:id="_K7jVwHlsEeS3PaPkrOoyLw" general="_BfU90HlqEeS3PaPkrOoyLw"/>
     <ownedAttribute xmi:type="uml:Property" xmi:id="_P25q4HlrEeS3PaPkrOoyLw" name="debut">

@@ -6,3 +6,4 @@ rapport/*.log
 rapport/*.toc
 rapport/*.pdf
 rapport/*.out
+target
