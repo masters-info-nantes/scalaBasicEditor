@@ -1,2 +1,8 @@
 .cache
 *.class
+rapport/.dropbox
+rapport/*.aux
+rapport/*.log
+rapport/*.toc
+rapport/*.pdf
+rapport/*.out

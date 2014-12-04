@@ -1,0 +1,58 @@
+\documentclass[french]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[a4paper]{geometry}
+\usepackage{babel}
+\usepackage[colorlinks=true,linkcolor=black]{hyperref}
+
+\author{Anthony \textsc{Pena} \and Jérémy \textsc{Bardon}}
+\title{\textsc{Scala Basic Editor}\\\normalsize{Projet de Génie Logiciel}}
+\date{}
+
+\begin{document}
+\maketitle
+
+\renewcommand\contentsname{Sommaire}
+\tableofcontents
+
+
+
+\section{Introduction}
+
+Durant ce projet nous avons mis en place une structure permettant de réaliser un éditeur de texte. La structure de classe a été défini à l'aide de l'outils Papyrus, un plugin pour Eclipse, et ensuite implémenté en Scala. Les classes et leurs méthodes ont été testées via des tests unitaires JUnit afin de valider leurs fonctionnements et limiter les bugs.
+
+\section{La structure générale}
+
+\subsection{Editeur}
+% conteneur des éléments d'un éditeur
+
+\subsection{La classe Buffer}
+% Une classe, 2 instances : zone de texte + clipboard
+% <Figure> des 2 instances ???
+% zone de texte et clipboard chacun rien de spé
+
+\subsection{Le Curseur}
+% 2 positions : début + fin
+% 		début = fin => curseur
+%		début < fin => sélection
+% Pour sélectionner : on place le curseur et on glisse pour définir l'emplacement du curseur de fin, donc on set début puis fin.
+
+\section{Les fonctionnalités}
+
+% pattern Command
+% <Figure> : Editeur, Action(+ une ou deux actions), Buffer, Invocateur
+% Correspondance avec le nommage du pattern
+% Explication choix pattern : beaucoup de fonctionnalité, meilleure évolutivité, séparation "comportement"/"données"
+
+\section{Les Macros}
+% Pattern Composite
+% <Figure> : Macro + Action + autre classe d'action
+% une macro est une action, mais composée d'autre actions (et potentiellement d'une autre macro)
+% Explication : ne dépend de rien d'autre que de Action => rien à retoucher pour que de nouvelles actions soient ajoutable à une macro
+
+\section{Conclusion}
+% Structure testé donc normalement fonctionnelle, modulo des erreurs à la mise en application
+% Note : Usage Scala = code réduit (+ découverte du langage)
+
+\end{document}
