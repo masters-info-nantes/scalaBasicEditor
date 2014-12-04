@@ -34,13 +34,13 @@ Durant ce projet nous avons mis en place une structure permettant de réaliser u
 
 \subsection{Le Curseur}
 % 2 positions : début + fin
-% 		début = fin => curseur
-%		début < fin => sélection
-% Pour sélectionner : on place le curseur et on glisse pour définir l'emplacement du curseur de fin, donc on set début puis fin.
+% 		début & fin = -1 => curseur
+%		début < fin & fin <> -1 => sélection
+% Pour sélectionner : on place le curseur puis on glisse pour définir l'emplacement du curseur de fin, donc on set début puis fin.
 
 \section{Les fonctionnalités}
 
-% pattern Command
+% pattern Command, Observer
 % <Figure> : Editeur, Action(+ une ou deux actions), Buffer, Invocateur
 % Correspondance avec le nommage du pattern
 % Explication choix pattern : beaucoup de fonctionnalité, meilleure évolutivité, séparation "comportement"/"données"
