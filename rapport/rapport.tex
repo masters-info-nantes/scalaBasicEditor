@@ -22,19 +22,19 @@
 
 \section{Introduction}
 
-Durant ce projet nous avons mis en place une structure permettant de réaliser un éditeur de texte. La structure de classe a été définie à l'aide de l'outils Papyrus\footnote{Un plugin pour Eclipse, plus d'information ici : http://TODO} et ensuite implémenté en Scala\footnote{Langage de programmation fonctionnel, exécuté sur JVM, plus d'information ici : http://TODO}. Les classes et leurs méthodes ont été testées via des tests unitaires JUnit afin de valider leurs fonctionnements et limiter les bugs.
+Durant ce projet nous avons mis en place une structure permettant de réaliser un éditeur de texte. Celle-ci a été définie à l'aide de l'outils Papyrus\footnote{Un plugin pour Eclipse, plus d'information ici : \url{http://www.eclipse.org/papyrus/}} et ensuite implémenté en Scala\footnote{Langage de programmation fonctionnel, exécuté sur JVM, plus d'information ici : \url{http://scala.com/fr/}}. Les classes et leurs méthodes ont été testées via des tests unitaires JUnit afin de valider leurs fonctionnements et limiter les bugs.
 
 \section{La structure générale}
 
 \subsection{Editeur}\label{ssec:éditeur}
 % conteneur des éléments d'un éditeur
-La classe éditeur est une classe assez basique, elle est utilisée pour contenir les différents éléments qui compose un éditeur selon les spécifications que l'on a défini. Elle contient principalement deux \texttt{Buffer} (voir \ref{ssec:buffers}), un pour la zone de texte et un pour le presse-papier, un \texttt{Curseur} (voir \ref{ssec:curseur}) et une \texttt{Macro} (voir \ref{sec:macros}).
+La classe éditeur est une classe assez basique, elle est utilisée pour contenir les différents éléments qui compose un éditeur selon les spécifications qui ont été définis. Elle contient principalement deux \texttt{Buffer} (voir \ref{ssec:buffers}) -- un pour la zone de texte et un pour le presse-papier --, un \texttt{Curseur} (voir \ref{ssec:curseur}) et une \texttt{Macro} (voir \ref{sec:macros}).
 
 \subsection{Les buffers}\label{ssec:buffers}
 % Une classe, 2 instances : zone de texte + clipboard
 % <Figure> des 2 instances ???
 % zone de texte et clipboard chacun rien de spé
-La classe \texttt{Buffer} est une classe générique de gestion d'un buffer de texte avec les fonctionnalités classiques d'un buffer que sont l'ajout de texte, à la fin ou à une position, le remplacement d'une portion de texte, la suppression, etc. Dans cette implémentation d'éditeur, le \texttt{Buffer} est utilisé sous la forme de 2 instances, une pour la "zone de texte" et une pour le "presse-papier". Les deux éléments ayant des caractéristiques proche (stocker du texte et manipulation de base), il était plus simple de créer une seule classe pour les deux.
+La classe \texttt{Buffer} est une classe générique de gestion d'un buffer de texte avec les fonctionnalités classiques d'un buffer que sont l'ajout de texte -- à la fin ou à une position -- le remplacement d'une portion de texte, la suppression, etc. Dans cette implémentation d'éditeur, le \texttt{Buffer} est utilisé sous la forme de 2 instances, une pour la "zone de texte" et une pour le "presse-papier". Les deux éléments ayant des caractéristiques proches (stockage du texte et manipulation de base), il était plus simple de créer une seule classe pour les deux.
 
 \subsubsection{Zone de texte}
 
@@ -42,23 +42,23 @@ La zone de texte est la partie où sera stocké le texte saisie par l'utilisateu
 
 \subsubsection{Presse-papier}
 
-Le presse-papier est un buffer dans lequel est stocké temporairement le contenu copier par l'utilisateur. Ici nous avons choisi de créer notre propre presse-papier pour simplifié l'implémentation, mais si nous avions réalisé complètement l'éditeur nous aurions utilisé à la place l'interface système et utilisé le presse-papier de ce dernier pour que le presse papier soit commun à tous les logiciels.
+Le presse-papier est un buffer dans lequel est stocké temporairement le contenu copié par l'utilisateur. Ici nous avons choisi de créer notre propre presse-papier pour simplifier l'implémentation, mais si nous avions réalisé complètement l'éditeur nous aurions utilisé à la place l'interface système et son presse-papier pour que le presse papier soit commun à tous les logiciels.
 
 \subsection{Le curseur}\label{ssec:curseur}
 % 2 positions : début + fin
 % 		début & fin = -1 => curseur
 %		début < fin & fin <> -1 => sélection
 % Pour sélectionner : on place le curseur puis on glisse pour définir l'emplacement du curseur de fin, donc on set début puis fin.
-Un \texttt{Curseur} est utilisé pour marquer la position à partir de laquelle le texte saisie doit être ajouté. Le \texttt{Curseur} peut sert aussi à définir une sélection. En interne, le \texttt{Curseur} possède deux positions, \texttt{début} et \texttt{fin}, lorsqu'on est en "mode" saisie, donc qu'on ne fait pas de sélection, \texttt{fin} est passé à -1, dans le cas où une sélection est faite, on assigne une valeur à \texttt{fin}.
+Un \texttt{Curseur} est utilisé pour marquer la position à partir de laquelle le texte saisie doit être ajouté. Le \texttt{Curseur} peut aussi servir à définir une sélection. En interne, le \texttt{Curseur} possède deux positions -- \texttt{début} et \texttt{fin} -- lorsqu'on est en \og{}mode saisie\fg{} (pas de sélection) \texttt{fin} est passé à -1, dans le cas où une sélection est faite, on assigne une valeur à \texttt{fin}.
 
-Nous avons choisi d'implémenter la sélection comme une action en deux étapes : la première où on place le curseur à une extrémitée de la sélection voulut, et la seconde où on glisse le cuseur vers l'autre extrémitée de la sélection. Dans le cas où on fait une sélection "négative" (en plaçant le curseur à la position la plus grande et qu'ensutie on place le second cuseur à la position la plus petite), la sélection est valide et les positions sont inversées lorsque c'est nécessaire.
+Nous avons choisi d'implémenter la sélection comme une action en deux étapes : la première où on place le curseur à une extrémitée de la sélection voulut, et la seconde où on glisse le curseur vers l'autre extrémitée de la sélection. Dans le cas où on fait une sélection \og{}négative\fg{} (en plaçant le curseur à la position la plus grande et qu'ensuite on place le second cuseur à la position la plus petite), la sélection est valide et les positions sont inversées lorsque c'est nécessaire.
 
 \section{Les fonctionnalités}\label{sec:fonctionnalités}
 % pattern Command
 % <Figure> : Editeur, Action, une ou deux actions, Invocateur
 % Correspondance avec le nommage du pattern
 % Explication choix pattern : beaucoup de fonctionnalité, meilleure évolutivité, séparation "comportement"/"données"
-Pour l'implémentation des différentes fonctionnalités nous avons choisi d'utiliser le \texttt{Pattern Commande}\footnote{Une définition complète est disponible à cette adresse : \url{https://fr.wikipedia.org/wiki/Commande_(patron_de_conception)}}. Avec ce pattern nous avons séparé données et comportements, ce qui était nécessaire au vu du nombre de fonctionnalité, afin d'éviter d'avoir une classe "dieu" qui ferait tout ou presque. Ce découpage permet aussi une plus grande évolutivité puisqu'une fonctionnalité est contenu dans une classe et est donc facilement extensible pour améliorer le comportement ou en ajouter de nouveau. Cela donne aussi la possibilité d'effectuer, de manière isoler, des tests sur les différentes fonctionnalités.
+Pour l'implémentation des différentes fonctionnalités nous avons choisi d'utiliser le \texttt{Pattern Commande}\footnote{Une définition complète est disponible à cette adresse : \url{https://fr.wikipedia.org/wiki/Commande_(patron_de_conception)}}. Avec ce pattern nous avons séparé données et comportements, ce qui était nécessaire au vu du nombre de fonctionnalités, afin d'éviter d'avoir une classe "dieu" qui ferait tout ou presque. Ce découpage permet aussi une plus grande évolutivité puisqu'une fonctionnalité est contenu dans une classe et est donc facilement extensible pour améliorer son comportement ou en ajouter de nouveau. Cela donne aussi la possibilité d'effectuer, de manière isoler, des tests sur les différentes fonctionnalités.
 
 Le pattern commande comprend 4 éléments :
 \begin{itemize}
