@@ -5,7 +5,6 @@ rapport/.dropbox
 rapport/*.aux
 rapport/*.log
 rapport/*.toc
-rapport/*.pdf
 rapport/*.out
 rapport/*.synctex.gz
 rapport/._.dropbox

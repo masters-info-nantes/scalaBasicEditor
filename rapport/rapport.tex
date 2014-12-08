@@ -4,13 +4,12 @@
 \usepackage{lmodern}
 \usepackage[a4paper]{geometry}
 \usepackage{babel}
+\usepackage{graphicx}
 \usepackage[colorlinks=true,linkcolor=black,urlcolor=black]{hyperref}
 
 \author{Anthony \textsc{Pena} \and Jérémy \textsc{Bardon}}
 \title{\textsc{Scala Basic Editor}\\\normalsize{Projet de Génie Logiciel}}
 \date{}
-
-%\newcommand{\lref}[1]{\lowercase{\nameref{#1}}}
 
 \begin{document}
 \maketitle
@@ -36,13 +35,19 @@ La classe éditeur est une classe assez basique, elle est utilisée pour conteni
 % Une classe, 2 instances : zone de texte + clipboard
 % <Figure> des 2 instances ???
 % zone de texte et clipboard chacun rien de spé
-La classe \texttt{Buffer} est une classe générique de gestion d'un buffer de texte avec les fonctionnalités classiques comme l'ajout de texte -- à la fin ou à une position donnée -- le remplacement d'une portion de texte, la suppression, etc. Dans cette implémentation d'éditeur, le \texttt{Buffer} est utilisé sous la forme de 2 instances : une pour la \og{}zone de texte\fg{} et une pour le \og{}presse-papier\fg{}. Les deux éléments ayant des caractéristiques proches (stockage du texte et manipulation de base), il était plus simple de créer une seule classe pour les deux.
+La classe \texttt{Buffer} est une classe générique de gestion d'un buffer de texte avec les fonctionnalités classiques comme l'ajout de texte -- à la fin ou à une position donnée -- le remplacement d'une portion de texte, la suppression, etc. Dans cette implémentation d'éditeur, le \texttt{Buffer} est utilisé sous la forme de 2 instances : une pour la \og{}\nameref{ssec:zone-texte}\fg{} et une pour le \og{}\nameref{ssec:presse-papier}\fg{}. Les deux éléments ayant des caractéristiques proches (stockage du texte et manipulation de base), il était plus simple de créer une seule classe pour les deux.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics{buffer-texte-clipboard.png}
+	\caption{Diagramme d'objet des deux instances de Buffer}
+\end{figure}
 
 \subsubsection{Zone de texte}\label{ssec:zone-texte}
 
-La zone de texte est la partie où sera stocké le texte saisi par l'utilisateur. Si on avait développé une interface graphique, cette objet ferait partie du moteur qui s'occupe de la gestion du  contenu affiché à l'utilisateur.
+La zone de texte est la partie où sera stocké le texte saisie par l'utilisateur. Si on avait développé une interface graphique, cette objet deviendrait une copie côté moteur du contenu affiché à l'utilisateur.
 
-\subsubsection{Presse-papier}
+\subsubsection{Presse-papier}\label{ssec:presse-papier}
 
 Le presse-papier est un buffer dans lequel est stocké temporairement le contenu copié par l'utilisateur. Ici nous avons choisi de créer notre propre presse-papier pour simplifier l'implémentation. Si nous avions réalisé complètement l'éditeur nous aurions utilisé à la place l'interface système et son presse-papier afin qu'il soit commun à tous les logiciels.
 
@@ -53,7 +58,7 @@ Le presse-papier est un buffer dans lequel est stocké temporairement le contenu
 % Pour sélectionner : on place le curseur puis on glisse pour définir l'emplacement du curseur de fin, donc on set début puis fin.
 Un \texttt{Curseur} est utilisé pour marquer la position à partir de laquelle le texte saisi doit être ajouté. Le \texttt{Curseur} peut aussi servir à définir une sélection. En interne, le \texttt{Curseur} possède deux positions -- \texttt{début} et \texttt{fin} -- lorsqu'on est en \og{}mode saisie\fg{} (pas de sélection), \texttt{fin} est passé à -1 mais dans le cas où une sélection est faite, on assigne une valeur à \texttt{fin}.
 
-Nous avons choisi d'implémenter la sélection comme une action en deux étapes : la première où l'on place le curseur à une extrémité de la sélection voulue, et la seconde qui consiste à glisser le curseur vers l'autre extrémité de la sélection. Dans le cas où l'on fait une sélection \og{}négative\fg{} (la seconde extrémité est à gauche du curseur), la sélection est valide et les positions sont inversées.
+Nous avons choisi d'implémenter la sélection comme une action en deux étapes : la première où on place le curseur à une extrémité de la sélection voulue, et la seconde qui consiste à glisser le curseur vers l'autre extrémité de la sélection. Dans le cas où on fait une sélection \og{}négative\fg{} (la seconde extrémité est à gauche du curseur), la sélection est valide et les positions sont inversées.
 
 \section{Les fonctionnalités}\label{sec:fonctionnalités}
 % pattern Command
@@ -70,6 +75,12 @@ Le pattern commande comprend 4 éléments :
 	\item \textbf{Récepteur} est la classe sur laquelle va être appliqué les commandes.
 \end{itemize}
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics{command-pattern.png}
+	\caption{Diagramme de classe des fonctionnalités}
+\end{figure}
+
 Dans notre implémentation nous avons utilisé un vocabulaire plus spécifique au projet. Nous avons remplacé commande par \texttt{Action}, les commandes réelles sont les classes \texttt{Copier}, \texttt{Coller}, \texttt{Effacer}, \texttt{Selectionner}, \texttt{Inserer}, \texttt{Deplacer}, \texttt{Remplacer} et \texttt{DeplacerCurseur}, et pour finir le récepteur est la classe \texttt{Editeur}.
 
 \section{Les Macros}\label{sec:macros}
@@ -81,6 +92,13 @@ Dans notre implémentation nous avons utilisé un vocabulaire plus spécifique a
 Pour les macros nous avons choisi d'utiliser le Pattern Composite\footnote{Une définition complète est disponible à cette adresse : \url{https://en.wikipedia.org/wiki/Composite_pattern}}, qui est approprié du fait qu'une macro n'est qu'une action composée d'une succession d'actions.
 
 Dans l'implémentation actuelle, le système ne prend qu'une macro en compte, ce qui est suffisant pour tester le fonctionnement des macros, mais on pourrait envisager de permettre l'enregistrement de plusieurs macros. On pourrait aussi donner la possibilité de composer les macros entre-elles, une macro étant défini comme une action à travers le Pattern Composite, cela ne pose aucun problème.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics{composite-pattern.png}
+	\caption{Diagramme de classe des macros}
+\end{figure}
+
 
 En utilisant ce pattern, on ouvre la possibilité d'étendre la liste des actions possibles sans avoir à modifier la classe \texttt{Macro} du fait qu'une macro est composée d'une série d'action, sans connaitre l'implémentation de chaque action. Il suffit donc que chaque nouvelle action hérite de la classe \texttt{Action} ou d'une de ses sous-classes (c'est le cas de \texttt{Coller} qui hérite de \texttt{Insérer}, la logique étant différente mais la mécanique identique). 
 
