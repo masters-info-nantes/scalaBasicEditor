@@ -4,7 +4,7 @@
 \usepackage{lmodern}
 \usepackage[a4paper]{geometry}
 \usepackage{babel}
-\usepackage[colorlinks=true,linkcolor=black]{hyperref}
+\usepackage[colorlinks=true,linkcolor=black,urlcolor=black]{hyperref}
 
 \author{Anthony \textsc{Pena} \and Jérémy \textsc{Bardon}}
 \title{\textsc{Scala Basic Editor}\\\normalsize{Projet de Génie Logiciel}}
@@ -13,46 +13,93 @@
 \begin{document}
 \maketitle
 
+\vspace{3cm}
+
 \renewcommand\contentsname{Sommaire}
 \tableofcontents
 
-
+\newpage
 
 \section{Introduction}
 
-Durant ce projet nous avons mis en place une structure permettant de réaliser un éditeur de texte. La structure de classe a été définie à l'aide de l'outils Papyrus (un plugin pour Eclipse) et ensuite implémenté en Scala. Les classes et leurs méthodes ont été testées via des tests unitaires JUnit afin de valider leurs fonctionnements et limiter les bugs.
+Durant ce projet nous avons mis en place une structure permettant de réaliser un éditeur de texte. La structure de classe a été définie à l'aide de l'outils Papyrus\footnote{Un plugin pour Eclipse, plus d'information ici : http://TODO} et ensuite implémenté en Scala\footnote{Langage de programmation fonctionnel, exécuté sur JVM, plus d'information ici : http://TODO}. Les classes et leurs méthodes ont été testées via des tests unitaires JUnit afin de valider leurs fonctionnements et limiter les bugs.
 
 \section{La structure générale}
 
-\subsection{Editeur}
+\subsection{Editeur}\label{ssec:éditeur}
 % conteneur des éléments d'un éditeur
+La classe éditeur est une classe assez basique, elle est utilisée pour contenir les différents éléments qui compose un éditeur selon les spécifications que l'on a défini. Elle contient principalement deux \texttt{Buffer} (voir \ref{ssec:buffers}), un pour la zone de texte et un pour le presse-papier, un \texttt{Curseur} (voir \ref{ssec:curseur}) et une \texttt{Macro} (voir \ref{sec:macros}).
 
-\subsection{La classe Buffer}
+\subsection{Les buffers}\label{ssec:buffers}
 % Une classe, 2 instances : zone de texte + clipboard
 % <Figure> des 2 instances ???
 % zone de texte et clipboard chacun rien de spé
+La classe \texttt{Buffer} est une classe générique de gestion d'un buffer de texte avec les fonctionnalités classiques d'un buffer que sont l'ajout de texte, à la fin ou à une position, le remplacement d'une portion de texte, la suppression, etc. Dans cette implémentation d'éditeur, le \texttt{Buffer} est utilisé sous la forme de 2 instances, une pour la "zone de texte" et une pour le "presse-papier". Les deux éléments ayant des caractéristiques proche (stocker du texte et manipulation de base), il était plus simple de créer une seule classe pour les deux.
 
-\subsection{Le Curseur}
+\subsubsection{Zone de texte}
+
+La zone de texte est la partie où sera stocké le texte saisie par l'utilisateur. Si on devait développer une interface graphique, cette objet deviendrait une copie côté moteur du contenu affiché à l'utilisateur.
+
+\subsubsection{Presse-papier}
+
+Le presse-papier est un buffer dans lequel est stocké temporairement le contenu copier par l'utilisateur. Ici nous avons choisi de créer notre propre presse-papier pour simplifié l'implémentation, mais si nous avions réalisé complètement l'éditeur nous aurions utilisé à la place l'interface système et utilisé le presse-papier de ce dernier pour que le presse papier soit commun à tous les logiciels.
+
+\subsection{Le curseur}\label{ssec:curseur}
 % 2 positions : début + fin
 % 		début & fin = -1 => curseur
 %		début < fin & fin <> -1 => sélection
 % Pour sélectionner : on place le curseur puis on glisse pour définir l'emplacement du curseur de fin, donc on set début puis fin.
+Un \texttt{Curseur} est utilisé pour marquer la position à partir de laquelle le texte saisie doit être ajouté. Le \texttt{Curseur} peut sert aussi à définir une sélection. En interne, le \texttt{Curseur} possède deux positions, \texttt{début} et \texttt{fin}, lorsqu'on est en "mode" saisie, donc qu'on ne fait pas de sélection, \texttt{fin} est passé à -1, dans le cas où une sélection est faite, on assigne une valeur à \texttt{fin}.
 
-\section{Les fonctionnalités}
+Nous avons choisi d'implémenter la sélection comme une action en deux étapes : la première où on place le curseur à une extrémitée de la sélection voulut, et la seconde où on glisse le cuseur vers l'autre extrémitée de la sélection. Dans le cas où on fait une sélection "négative" (en plaçant le curseur à la position la plus grande et qu'ensutie on place le second cuseur à la position la plus petite), la sélection est valide et les positions sont inversées lorsque c'est nécessaire.
 
-% pattern Command, Observer
-% <Figure> : Editeur, Action(+ une ou deux actions), Buffer, Invocateur
+\section{Les fonctionnalités}\label{sec:fonctionnalités}
+% pattern Command
+% <Figure> : Editeur, Action, une ou deux actions, Invocateur
 % Correspondance avec le nommage du pattern
 % Explication choix pattern : beaucoup de fonctionnalité, meilleure évolutivité, séparation "comportement"/"données"
+Pour l'implémentation des différentes fonctionnalités nous avons choisi d'utiliser le \texttt{Pattern Commande}\footnote{Une définition complète est disponible à cette adresse : \url{https://fr.wikipedia.org/wiki/Commande_(patron_de_conception)}}. Avec ce pattern nous avons séparé données et comportements, ce qui était nécessaire au vu du nombre de fonctionnalité, afin d'éviter d'avoir une classe "dieu" qui ferait tout ou presque. Ce découpage permet aussi une plus grande évolutivité puisqu'une fonctionnalité est contenu dans une classe et est donc facilement extensible pour améliorer le comportement ou en ajouter de nouveau. Cela donne aussi la possibilité d'effectuer, de manière isoler, des tests sur les différentes fonctionnalités.
 
-\section{Les Macros}
+Le pattern commande comprend 4 éléments :
+\begin{itemize}
+	\item \textbf{Commande} est une interface que doivent implémenter les classes de commande.
+	\item \textbf{Commande réelle} est un ensemble de classe qui implémente la classe Commande.
+	\item \textbf{Invocateur} est la classe sur laquelle on va appeler toutes les commandes, comme de simple méthode et en interne à cette classe sera utiliser des commandes réelles.
+	\item \textbf{Récepteur} est la classe sur laquelle va être appliqué les commandes.
+\end{itemize}
+
+Dans notre implémentation nous avons utilisé un vocabulaire plus spécifique au projet, nous avons remplacé commande par \texttt{Action}, les commandes réelles sont les classes \texttt{Copier}, \texttt{Coller}, \texttt{Effacer}, \texttt{Selectionner}, \texttt{Inserer}, \texttt{Deplacer}, \texttt{Remplacer} et \texttt{DeplacerCurseur}, et pour finir le récepteur est la classe \texttt{Editeur}.
+
+\section{Les Macros}\label{sec:macros}
 % Pattern Composite
 % <Figure> : Macro + Action + autre classe d'action
 % une macro est une action, mais composée d'autre actions (et potentiellement d'une autre macro)
 % Explication : ne dépend de rien d'autre que de Action => rien à retoucher pour que de nouvelles actions soient ajoutable à une macro
 
+Pour les macros nous avons choisi d'utiliser le Pattern Composite\footnote{Une définition complète est disponible à cette adresse : \url{https://en.wikipedia.org/wiki/Composite_pattern}}, approprié ici du fait qu'une macro n'est rien d'autre qu'une action composée d'une succession d'action.
+
+Dans l'implémentation actuelle, le système ne prend qu'une macro en compte, ce qui est suffisant pour tester le fonctionnement des macros, mais on pourrait envisager de permettre l'enregistrement de plusieurs macros et et aussi de composer les macros entre-elles, une macro étant défini comme une action à travers le Pattern Composite, cela ne pose aucun problème.
+
+En utilisant ce pattern, on ouvre la possibilité d'étendre la liste des actions possibles sans avoir à modifier la classe \texttt{Macro} du fait qu'une macro est composée d'une série d'action, sans savoir quelle est l'implémentation d'action qui la composent. Il suffit donc que chaque nouvelle action hérite d'\texttt{Action} ou d'une de ses sous-classes (comme c'est le cas avec \texttt{Coller} qui hérite de \texttt{Insérer}, la logique étant différente mais la mécanique identique). 
+
+
+\section{Évolutions}
+
+\subsection{Interface}
+
+Pour aller plus loin dans ce projet, il pourrait être intéressant de créer une interface d'édition. Actuellement seul des tests vérifient que les différents éléments sont fonctionnels et une interface en ligne de commande, via ncurses par exemple, ou graphique permettrait de vérifier que l'implémentation actuelle ne pose pas de problème et de rendre utilisable le projet.
+
+\subsection{Nouvelles fonctionnalités}
+
+Il pourrait être intéressant d'étendre les possibilités de l'éditeur. Par exemple en ajoutant la possibilité de sauvegarder plusieurs macros, de leurs assigner des raccourcis clavier différents. On pourrait aussi ajouter un fichier de configuration contenant des snippets\footnote{\url{https://en.wikipedia.org/wiki/Snippet_(programming)}} de code. 
+
 \section{Conclusion}
 % Structure testé donc normalement fonctionnelle, modulo des erreurs à la mise en application
 % Note : Usage Scala = code réduit (+ découverte du langage)
+Tout au long de ce projet nous avons pu mettre en pratique les compétences acquisent au cours du module de Génie Logiciel et ainsi mettre en application une partie des éléments théoriques que sont les Design Pattern dans un projet concret. Ce projet nous a aussi permis de mettre en pratique notre capacité à utiliser un nouveau langage de programmation en même temps que nous l'avons appris, ainsi que dans notre cas voir la puissance du langage Scala, qui permet de produire des binaires portables compatible avec la JVM, tout en réduisant considérablement la longueur du code, ce qui augmente sa clareté. Nous avons aussi mis en application le module de Test et Vérification a travers un certains nombre de test unitaire, qui nous ont permis de vérifier le bon fonctionnement de nos classes.
+
+%\section{Annexes}
+
+% diagrammes complets
 
 \end{document}

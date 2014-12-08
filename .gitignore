@@ -8,3 +8,5 @@ rapport/*.toc
 rapport/*.pdf
 rapport/*.out
 rapport/*.synctex.gz
+rapport/._.dropbox
+rapport/._Icon*
